@@ -7,6 +7,7 @@ import {
   CardActions,
   CardContent,
   CardMedia,
+  Container,
   Typography,
 } from '@mui/material';
 import Box from '@mui/material/Box';
@@ -22,7 +23,7 @@ const addTocart = (product, setCart) => {
     price: product.price,
     count: 1,
   };
-  setCart((preValue) => [...preValue, newItem]);
+  setCart((preValue: []) => [...preValue, newItem]);
 };
 
 const addMoreItem = (product, cart, setCart) => {
@@ -41,54 +42,58 @@ export default function ResponsiveGrid() {
   const [itemId, setItemId] = React.useState([]);
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <Grid
-        container
-        spacing={{ xs: 2, md: 3 }}
-        columns={{ xs: 4, sm: 8, md: 12 }}
-      >
-        {products.map((product) => (
-          <Grid item xs={12} sm={6} md={4} key={product.id}>
-            <Card>
-              <CardMedia
-                sx={{ height: 300 }}
-                image={product.image}
-                title={product.title}
-              />
-              <CardContent>
-                <Typography gutterBottom variant="h5" component="div">
-                  {product.title}
-                </Typography>
-                {/* <Typography variant="body2" color="text.secondary">
-                  {product.description}
-                </Typography> */}
-              </CardContent>
-              <CardActions>
-                <Button
-                  size="medium"
-                  onClick={() => {
-                    if (!itemId.includes(product.id)) {
-                      setItemId([...itemId, product.id]);
-                      addTocart(product, setCart);
-                    } else {
-                      addMoreItem(product, cart, setCart);
-                    }
+    <Container maxWidth="xl" sx={{ marginTop: '5rem' }}>
+      <Grid container spacing={2}>
+        {products.map((product) => {
+          return (
+            <Grid
+              key={product.id}
+              item
+              xs={6}
+              md={4}
+              xl={4}
+              sx={{ padding: '20px' }}
+            >
+              <Card
+                sx={{
+                  height: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                }}
+              >
+                <CardMedia
+                  image={product.image}
+                  title={product.title}
+                  sx={{ paddingTop: '100%' }}
+                />
+                <CardContent sx={{ flexGrow: 1 }}>
+                  <Typography variant="h5"> {product.title}</Typography>
+                  {/* <Typography> {item.description}</Typography> */}
+                </CardContent>
 
-                    console.log('Hello');
-                  }}
+                <CardActions>
+                  <Button
+                    variant="contained"
+                    onClick={() => {
+                      if (!itemId.includes(product.id)) {
+                        setItemId([...itemId, product.id]);
+                        addTocart(product, setCart);
+                      } else {
+                        addMoreItem(product, cart, setCart);
+                      }
 
-                  // if (findOne) {
-                  //   console.log('Found One');
-                  // }
-                >
-                  {console.log(cart)}
-                  Add to the cart
-                </Button>
-              </CardActions>
-            </Card>
-          </Grid>
-        ))}
+                      console.log(cart);
+                    }}
+                  >
+                    {' '}
+                    Add To cart{' '}
+                  </Button>
+                </CardActions>
+              </Card>
+            </Grid>
+          );
+        })}
       </Grid>
-    </Box>
+    </Container>
   );
 }
